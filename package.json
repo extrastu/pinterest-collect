@@ -52,7 +52,7 @@
     },
     "meta": {
       "title": "Pinterest 收藏",
-      "description": "左侧收藏夹 + 右侧 Pinterest 浏览器,浏览时点收藏即同步到自己的收藏列表"
+      "description": "Pinterest 收藏:左侧收藏夹,右侧内嵌 Pinterest 浏览与登录推荐,点收藏同步到左侧。DeepSeek Harness 插件。"
     },
     "client": {
       "platform": "web",

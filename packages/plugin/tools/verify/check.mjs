@@ -163,9 +163,12 @@ async function checkA1() {
   const dep = pkg?.dependencies?.['pinterest-collect'];
   const linkPath = join(PROFILE_DIR, 'node_modules/pinterest-collect');
   let isLink = false;
+  let isDir = false;
   let real = '';
   try {
-    isLink = lstatSync(linkPath).isSymbolicLink();
+    const stat = lstatSync(linkPath);
+    isLink = stat.isSymbolicLink();
+    isDir = stat.isDirectory();
     real = realpathSync(linkPath);
   } catch (e) {
     throw new Error(`node_modules/pinterest-collect 不可访问：${e.message}`);
@@ -176,16 +179,31 @@ async function checkA1() {
   } catch {
     repoReal = '';
   }
-  const targetOk = real === repoReal || real === realpathSync(PROJECT_ROOT);
-  const ok = inBundles && isLink && targetOk;
+  // 除了本地源码链接,也接受从 GitHub 安装的插件包:依赖名一致且声明了 dsh.bundle 即可
+  let installedManifest = null;
+  try {
+    installedManifest = readJson(join(linkPath, 'package.json'));
+  } catch {
+    installedManifest = null;
+  }
+  const bundleOk =
+    !!installedManifest &&
+    installedManifest.name === 'pinterest-collect' &&
+    installedManifest.dsh !== undefined &&
+    installedManifest.dsh.bundle !== undefined &&
+    typeof installedManifest.dsh.bundle.patch === 'string';
+  const localLink = real === repoReal || real === realpathSync(PROJECT_ROOT);
+  const targetOk = localLink || bundleOk;
+  const ok = inBundles && (isLink || isDir) && targetOk;
   return {
     status: ok ? 'PASS' : 'FAIL',
     evidence:
       `${rel(pkgPath)}\n` +
       `  dsh.profile.bundles 含 pinterest-collect: ${inBundles}（共 ${bundles.length} 个 bundle，位置 #${bundles.indexOf('pinterest-collect')}）\n` +
       `  dependencies.pinterest-collect: ${JSON.stringify(dep)}\n` +
-      `  node_modules/pinterest-collect 是符号链接: ${isLink} → realpath: ${real}（期望仓库根 ${repoReal}，或源码包 ${realpathSync(PROJECT_ROOT)}）`,
-    extra: { inBundles, isLink, targetOk, real },
+      `  node_modules/pinterest-collect: 符号链接=${isLink} 目录=${isDir} → realpath: ${real}\n` +
+      `  安装形态: ${localLink ? '本地仓库链接' : bundleOk ? '已安装的插件包(GitHub / npm)' : '无法识别'}（本地期望仓库根 ${repoReal} 或源码包 ${realpathSync(PROJECT_ROOT)}）`,
+    extra: { inBundles, isLink, targetOk, real, localLink, bundleOk },
   };
 }
 
@@ -1065,7 +1083,7 @@ async function main() {
   console.log('');
 
   console.log('— A. 安装与清单 —');
-  await check('A1', 'profile 安装：bundles 含 pinterest-collect + node_modules 符号链接指向项目', checkA1);
+  await check('A1', 'profile 安装：bundles 含 pinterest-collect + 依赖可用(本地链接或 GitHub 插件包)', checkA1);
   await check('A2', '包清单：exports . / ./client / ./locale/*.json / ./icon + dsh.bundle.patch + platform=web', checkA2);
   await check('A3', 'locale/en.json、zh.json 的 meta.title/description + icon.svg 基础校验', checkA3);
 
