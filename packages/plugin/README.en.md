@@ -234,4 +234,4 @@ Unofficial third-party plugin, not affiliated with Pinterest. It reads data thro
 
 ## License
 
-A `LICENSE` file should be added before publishing (MIT recommended). Until a license is chosen, all rights are reserved.
+Released under the [MIT License](../../LICENSE).

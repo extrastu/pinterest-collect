@@ -11,5 +11,6 @@
     "url": "https://github.com/extrastu/pinterest-collect",
     "directory": "packages/website"
   },
-  "homepage": "https://pinterestcollect.pages.dev/"
+  "homepage": "https://pinterestcollect.pages.dev/",
+  "license": "MIT"
 }

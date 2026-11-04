@@ -84,7 +84,7 @@ node packages/plugin/tools/verify/check.mjs
 
 ## 许可证
 
-发布前请补充 `LICENSE` 文件(推荐 MIT);在许可证确定前,本仓库默认保留所有权利。
+本项目采用 [MIT License](LICENSE)。
 
 ## 免责声明
 

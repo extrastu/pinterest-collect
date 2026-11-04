@@ -237,4 +237,4 @@ Pinterest 的 Web resource 接口会变,也可能临时风控。先在账号页/
 
 ## 许可证
 
-发布前请补充 `LICENSE` 文件(推荐 MIT)。在许可证确定前,本仓库默认保留所有权利。
+本项目采用 [MIT License](../../LICENSE)。

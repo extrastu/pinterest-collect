@@ -21,5 +21,6 @@
   "homepage": "https://pinterestcollect.pages.dev/",
   "bugs": {
     "url": "https://github.com/extrastu/pinterest-collect/issues"
-  }
+  },
+  "license": "MIT"
 }

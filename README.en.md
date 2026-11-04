@@ -82,7 +82,7 @@ Conventions: plain JS client parts (no JSX), theme-token colors only, all user-f
 
 ## License
 
-Add a `LICENSE` file before publishing (MIT recommended). Until a license is chosen, all rights are reserved.
+Released under the [MIT License](LICENSE).
 
 ## Disclaimer
 
