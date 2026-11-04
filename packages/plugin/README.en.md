@@ -240,9 +240,9 @@ No. Saves are local; each detail page has "Open on Pinterest" for manual saving.
 
 ## Related app
 
-**Post Saver: Save Social Posts** (iPhone / iPad) — save posts from **23 platforms** (X, Threads, Instagram, YouTube, Xiaohongshu, Weibo, Pinterest, and more) as clean text / images / video: [download on the App Store](https://apps.apple.com/cn/app/post-saver-save-social-posts/id6816399878?ct=pinterest-collect).
+**Post Saver: Save Social Posts** (iPhone / iPad) — save posts from **23 platforms** (X, Threads, Instagram, YouTube, Xiaohongshu, Weibo, Pinterest, and more) as clean text / images / video: [download on the App Store](https://apps.apple.com/app/apple-store/id6816399878?pt=128665559&ct=pinterest-collect&mt=8).
 
-The same entry sits under **Settings → About** in the plugin (with `ct=pinterest-collect` for attribution); its icon is inlined, so it costs no extra request.
+The same entry sits under **Settings → About** in the plugin (with `pt`/`ct` for attribution); its icon is inlined, so it costs no extra request.
 
 ## Disclaimer
 

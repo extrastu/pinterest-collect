@@ -243,9 +243,9 @@ Pinterest 的 Web resource 接口会变,也可能临时风控。先在账号页/
 
 ## 相关 App
 
-**Post Saver: Save Social Posts**(iPhone / iPad)—把 X、Threads、Instagram、YouTube、小红书、微博、Pinterest 等 **23 个平台**的帖子保存成干净的文字 / 图片 / 视频:[App Store 下载](https://apps.apple.com/cn/app/post-saver-save-social-posts/id6816399878?ct=pinterest-collect)。
+**Post Saver: Save Social Posts**(iPhone / iPad)—把 X、Threads、Instagram、YouTube、小红书、微博、Pinterest 等 **23 个平台**的帖子保存成干净的文字 / 图片 / 视频:[App Store 下载](https://apps.apple.com/app/apple-store/id6816399878?pt=128665559&ct=pinterest-collect&mt=8)。
 
-插件「设置 → 关于」下方也放了同一个入口(带 `ct=pinterest-collect` 参数,方便统计来源);图标是内联资源,不产生额外请求。
+插件「设置 → 关于」下方也放了同一个入口(带 `pt`/`ct` 参数,方便统计来源);图标是内联资源,不产生额外请求。
 
 ## 免责声明
 

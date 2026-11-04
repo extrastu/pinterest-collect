@@ -100,7 +100,7 @@ node packages/plugin/tools/verify/check.mjs
 
 ## 相关 App
 
-[Post Saver](https://apps.apple.com/cn/app/post-saver-save-social-posts/id6816399878?ct=pinterest-collect-github)——在 iPhone / iPad 上保存 23 个平台的帖子。
+[Post Saver](https://apps.apple.com/app/apple-store/id6816399878?pt=128665559&ct=pinterest-collect&mt=8)——在 iPhone / iPad 上保存 23 个平台的帖子。
 
 ## 许可证
 

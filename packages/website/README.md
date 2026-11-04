@@ -67,7 +67,7 @@ grep -rl 'pinterestcollect.pages.dev' packages/website | xargs sed -i '' 's#http
 grep -rn "pages.dev" packages/website --include='*.html' --include='*.xml' --include='*.txt' | grep -v README
 ```
 
-App Store 推广链接里的 `ct=pinterest-collect-site` 是渠道参数,可在 App Store Connect 分析里区分官网来源;需要改推广位时改这个链接即可。
+App Store 推广链接里的 `pt=128665559&ct=pinterest-collect` 是渠道参数，可在 App Store Connect 分析里区分来源；需要改推广位时改这个链接即可。
 
 ## SEO 清单(已内置)
 

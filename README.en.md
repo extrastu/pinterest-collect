@@ -98,7 +98,7 @@ Conventions: plain JS client parts (no JSX), theme-token colors only, all user-f
 
 ## Related app
 
-[Post Saver](https://apps.apple.com/cn/app/post-saver-save-social-posts/id6816399878?ct=pinterest-collect-github) — save posts from 23 platforms on iPhone / iPad.
+[Post Saver](https://apps.apple.com/app/apple-store/id6816399878?pt=128665559&ct=pinterest-collect&mt=8) — save posts from 23 platforms on iPhone / iPad.
 
 ## License
 
