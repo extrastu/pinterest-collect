@@ -4,6 +4,12 @@
 
 <sub>v1.2.0 · DeepSeek Harness 插件 · macOS / Windows / Linux · [English](README.en.md)</sub>
 
+<p align="center">
+  <img src="../../docs/screenshots/plugin-overview.webp" alt="Pinterest 收藏插件界面:左侧是收藏夹,右侧是 Pinterest 个性化推荐流" width="100%">
+</p>
+
+<p align="center"><sub>左侧收藏 · 右侧个性化推荐流 · 看到喜欢的图点 ♥ 即收藏</sub></p>
+
 ---
 
 ## 这是什么

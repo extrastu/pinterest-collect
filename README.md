@@ -9,6 +9,12 @@
 
 > 一个把 Pinterest 收藏夹和个性化推荐流放进 DeepSeek Harness 的面板插件;附带一个零构建的官网。
 
+<p align="center">
+  <img src="docs/screenshots/plugin-overview.webp" alt="Pinterest 收藏插件界面:左侧是收藏夹,右侧是 Pinterest 个性化推荐流" width="100%">
+</p>
+
+<p align="center"><sub>左侧收藏 · 右侧个性化推荐流 · 看到喜欢的图点 ♥ 即收藏</sub></p>
+
 ## 仓库结构(monorepo)
 
 | 位置 | 说明 | 文档 |
@@ -16,13 +22,17 @@
 | 仓库根(包名 `pinterest-collect`) | **安装入口**:`dsh.bundle` / `dsh.client` 声明、bundle patch 与模块导出 | 本 README |
 | [`packages/plugin`](packages/plugin) | **插件源码**:左侧本地收藏夹、右侧 Pinterest 浏览与登录推荐流、账号页、设置页 | [中文](packages/plugin/README.md) · [English](packages/plugin/README.en.md) · [契约](packages/plugin/CONTRACT.md) |
 | [`packages/website`](packages/website) | **官网**:纯静态、中英双语、响应式、内置 SEO(OG / hreflang / JSON-LD / sitemap) | [website/README.md](packages/website/README.md) |
+| [`docs/`](docs) | README 截图等静态资源 | — |
 
 ```
 pinterest-collect/
 ├─ packages/
-│  ├─ plugin/        # DeepSeek Harness 插件包(安装目标)
+│  ├─ plugin/        # 插件源码
 │  └─ website/       # 静态官网
-├─ package.json      # workspace 根(只放脚本,不参与插件安装)
+├─ docs/             # README 效果图等资源
+├─ index.js          # 安装入口:转发 packages/plugin 的 Host 导出
+├─ cordis.patch.yml  # 安装入口的 bundle patch
+├─ package.json      # 安装入口(pinterest-collect)+ workspace 根
 └─ pnpm-workspace.yaml
 ```
 

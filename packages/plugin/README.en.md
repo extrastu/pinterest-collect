@@ -4,6 +4,12 @@
 
 <sub>v1.2.0 · DeepSeek Harness plugin · macOS / Windows / Linux · [中文](README.md)</sub>
 
+<p align="center">
+  <img src="../../docs/screenshots/plugin-overview.webp" alt="Pinterest Collection plugin UI: your saves on the left, the personalized Pinterest feed on the right" width="100%">
+</p>
+
+<p align="center"><sub>Your saves on the left · a personalized feed on the right · hit ♥ to save</sub></p>
+
 ---
 
 ## What it is

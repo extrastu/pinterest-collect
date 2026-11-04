@@ -9,6 +9,12 @@
 
 > A DeepSeek Harness panel plugin that puts your Pinterest saves and personalized feed inside the harness, plus a zero-build marketing site.
 
+<p align="center">
+  <img src="docs/screenshots/plugin-overview.webp" alt="Pinterest Collection plugin UI: your saves on the left, the personalized Pinterest feed on the right" width="100%">
+</p>
+
+<p align="center"><sub>Your saves on the left · a personalized feed on the right · hit ♥ to save</sub></p>
+
 ## Monorepo layout
 
 | Location | What it is | Docs |
@@ -16,13 +22,17 @@
 | Repository root (package `pinterest-collect`) | **Install entry**: `dsh.bundle` / `dsh.client` declarations, bundle patch and module exports | this README |
 | [`packages/plugin`](packages/plugin) | **Plugin source**: local saves, Pinterest browsing + logged-in feed, account page, settings | [English](packages/plugin/README.en.md) · [中文](packages/plugin/README.md) · [contract](packages/plugin/CONTRACT.md) |
 | [`packages/website`](packages/website) | **Website**: static, bilingual, responsive, SEO built in (OG / hreflang / JSON-LD / sitemap) | [website/README.md](packages/website/README.md) |
+| [`docs/`](docs) | README screenshots and static assets | — |
 
 ```
 pinterest-collect/
 ├─ packages/
-│  ├─ plugin/        # the installable DeepSeek Harness plugin
+│  ├─ plugin/        # plugin source
 │  └─ website/       # static marketing site
-├─ package.json      # workspace root (scripts only, not the plugin)
+├─ docs/             # README screenshots and assets
+├─ index.js          # install entry: forwards the Host exports from packages/plugin
+├─ cordis.patch.yml  # install entry bundle patch
+├─ package.json      # install entry (pinterest-collect) + workspace root
 └─ pnpm-workspace.yaml
 ```
 
