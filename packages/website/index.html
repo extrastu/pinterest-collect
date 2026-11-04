@@ -54,6 +54,7 @@
     "inLanguage": ["zh-CN", "en"],
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
     "screenshot": "https://pinterestcollect.pages.dev/assets/og-image.png",
+    "installUrl": "https://github.com/extrastu/pinterest-collect",
     "sameAs": ["https://github.com/extrastu/pinterest-collect"]
   }
   </script>
@@ -141,7 +142,7 @@
           <p class="hero-lead">左侧是你的收藏夹,右侧是登录后为你生成的 Pinterest 推荐流。看到喜欢的图,点一下 ♥ 就收藏;点开还能顺着「更多类似」一直逛下去。</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#install">安装指南</a>
-            <a class="btn btn-ghost" href="https://github.com/extrastu/pinterest-collect" rel="noopener">查看源码</a>
+            <a class="btn btn-ghost" href="https://github.com/extrastu/pinterest-collect" rel="noopener">GitHub 仓库</a>
           </div>
           <ul class="hero-meta">
             <li>macOS · Windows · Linux</li>
@@ -246,7 +247,7 @@
         <ol class="steps">
           <li class="step">
             <h3>安装插件</h3>
-            <p>在 Harness 里用 plugin_manager 安装本仓库目录,重启一次 Harness 并刷新页面。</p>
+            <p>在 Harness 里用 plugin_manager 从 GitHub 安装,重启一次 Harness 并刷新页面。</p>
           </li>
           <li class="step">
             <h3>登录 Pinterest</h3>
@@ -265,10 +266,10 @@
         <div class="install-copy">
           <p class="eyebrow">安装</p>
           <h2 id="install-title">一条命令装进 Harness</h2>
-          <p>需要 DeepSeek Harness(桌面版或 Web 版)与支持插件安装的 profile。一键登录需要本机有 Chrome;没有 Chrome 时用「粘贴 Cookie」登录。</p>
+          <p>需要 DeepSeek Harness(桌面版或 Web 版)与支持插件安装的 profile。直接从 GitHub 安装,不用先 clone:</p>
           <ul class="install-notes">
-            <li>安装本地目录后,<strong>重启一次 Harness</strong>,再刷新页面;</li>
-            <li>之后改客户端代码只需刷新页面,改 Host 代码需重启或关→开插件;</li>
+            <li>安装后<strong>重启一次 Harness</strong>,再刷新页面;</li>
+            <li>想改代码就 clone 仓库,用仓库绝对路径安装(指向仓库根);</li>
             <li>完整说明、脚本与测试见仓库 README。</li>
           </ul>
         </div>
@@ -279,10 +280,10 @@
           </div>
           <pre id="install-code"><code>plugin_manager {
   action: "install_bundle",
-  target: "/absolute/path/to/pinterest-collect"
+  target: "github:extrastu/pinterest-collect"
 }
 
-<span class="cmt">// 然后重启一次 Harness,刷新页面</span></code></pre>
+<span class="cmt">// 重启一次 Harness 并刷新页面;本地开发可换成仓库绝对路径</span></code></pre>
         </div>
       </div>
     </section>

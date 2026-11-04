@@ -54,6 +54,7 @@
     "inLanguage": ["zh-CN", "en"],
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "screenshot": "https://pinterestcollect.pages.dev/assets/og-image.png",
+    "installUrl": "https://github.com/extrastu/pinterest-collect",
     "sameAs": ["https://github.com/extrastu/pinterest-collect"]
   }
   </script>
@@ -141,7 +142,7 @@
           <p class="hero-lead">Your collection on the left, a Pinterest feed generated for you on the right. Hit ♥ on anything you like; open a pin and keep going with more like this.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#install">Install guide</a>
-            <a class="btn btn-ghost" href="https://github.com/extrastu/pinterest-collect" rel="noopener">View source</a>
+            <a class="btn btn-ghost" href="https://github.com/extrastu/pinterest-collect" rel="noopener">GitHub repository</a>
           </div>
           <ul class="hero-meta">
             <li>macOS · Windows · Linux</li>
@@ -246,7 +247,7 @@
         <ol class="steps">
           <li class="step">
             <h3>Install the plugin</h3>
-            <p>Install this repository as a bundle with plugin_manager, restart Harness once and refresh the page.</p>
+            <p>Install from GitHub with plugin_manager, restart Harness once and refresh the page.</p>
           </li>
           <li class="step">
             <h3>Sign in to Pinterest</h3>
@@ -265,10 +266,10 @@
         <div class="install-copy">
           <p class="eyebrow">Install</p>
           <h2 id="install-title">One command into Harness</h2>
-          <p>You need DeepSeek Harness (desktop or web) with a plugin-capable profile. One-click login needs Chrome locally; otherwise use the cookie-paste flow.</p>
+          <p>You need DeepSeek Harness (desktop or web) with a plugin-capable profile. Install straight from GitHub — no clone needed:</p>
           <ul class="install-notes">
-            <li>After installing the local directory, <strong>restart Harness once</strong> and refresh the page;</li>
-            <li>Later, client-only changes need a refresh; Host changes need a restart or a plugin toggle;</li>
+            <li>After installing, <strong>restart Harness once</strong> and refresh the page;</li>
+            <li>To hack on the code, clone the repo and install the repository root by absolute path;</li>
             <li>Full instructions, scripts and tests live in the repository README.</li>
           </ul>
         </div>
@@ -279,10 +280,10 @@
           </div>
           <pre id="install-code"><code>plugin_manager {
   action: "install_bundle",
-  target: "/absolute/path/to/pinterest-collect"
+  target: "github:extrastu/pinterest-collect"
 }
 
-<span class="cmt">// then restart Harness once and refresh the page</span></code></pre>
+<span class="cmt">// restart Harness once and refresh; use the local repo path for development</span></code></pre>
         </div>
       </div>
     </section>
