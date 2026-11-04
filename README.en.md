@@ -3,7 +3,8 @@
 <p>
   <a href="packages/plugin/README.en.md">Plugin docs (English)</a> ·
   <a href="packages/plugin/README.md">中文</a> ·
-  <a href="packages/website/README.md">Website docs</a>
+  <a href="packages/website/README.md">Website docs</a> ·
+  <a href="https://pinterestcollect.pages.dev/">Live site ↗</a>
 </p>
 
 > A DeepSeek Harness panel plugin that puts your Pinterest saves and personalized feed inside the harness, plus a zero-build marketing site.
@@ -42,11 +43,15 @@ Restart Harness once and refresh the page; a “Pinterest Collection” icon app
 
 ## Website
 
+Live: **https://pinterestcollect.pages.dev/** (English at `/en/`, deployed on Cloudflare Pages).
+
+Local preview:
+
 ```bash
 python3 -m http.server 8080 --directory packages/website
 ```
 
-Open http://localhost:8080 (English at `/en/`). Deployment and placeholder replacement: [packages/website/README.md](packages/website/README.md).
+Open http://localhost:8080. Deployment notes: [packages/website/README.md](packages/website/README.md).
 
 ## Development
 

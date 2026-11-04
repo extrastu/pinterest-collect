@@ -170,6 +170,8 @@ node tools/verify/check.mjs
 
 ## 官网
 
+线上地址:**https://pinterestcollect.pages.dev/**(英文 `/en/`)。
+
 monorepo 里的 [`../website/`](../website/) 是一个零构建静态站:中文首页 `/`、英文 `/en/`,响应式布局、深浅色主题、复制安装命令,并内置好 SEO(canonical / hreflang / Open Graph / `SoftwareApplication` + `WebSite` + `FAQPage` 结构化数据 / sitemap / robots)。
 
 ```bash

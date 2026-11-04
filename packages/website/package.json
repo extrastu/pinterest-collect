@@ -5,5 +5,11 @@
   "description": "Static marketing site for the Pinterest Collection plugin (zh/en, responsive, SEO).",
   "scripts": {
     "serve": "python3 -m http.server 8080"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/extrastu/pinterest-collect",
+    "directory": "packages/website"
+  },
+  "homepage": "https://pinterestcollect.pages.dev/"
 }

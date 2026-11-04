@@ -48,5 +48,14 @@
     "build": "node build-client.mjs",
     "test": "node tools/host-api-test.mjs && node tools/host-fetch-test.mjs",
     "check": "node tools/verify/check.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/extrastu/pinterest-collect",
+    "directory": "packages/plugin"
+  },
+  "homepage": "https://pinterestcollect.pages.dev/",
+  "bugs": {
+    "url": "https://github.com/extrastu/pinterest-collect/issues"
   }
 }

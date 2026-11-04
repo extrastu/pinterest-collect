@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pinterest-collect.example.com/sitemap.xml
+Sitemap: https://pinterestcollect.pages.dev/sitemap.xml

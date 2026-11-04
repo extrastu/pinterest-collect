@@ -167,6 +167,8 @@ Conventions (see `CONTRACT.md`):
 
 ## Website
 
+Live: **https://pinterestcollect.pages.dev/** (English at `/en/`).
+
 The monorepo's [`../website/`](../website/) is a zero-build static site: Chinese at `/`, English at `/en/`, responsive, light/dark, copy-to-clipboard install snippet, and SEO baked in (canonical / hreflang / Open Graph / `SoftwareApplication` + `WebSite` + `FAQPage` JSON-LD / sitemap / robots).
 
 ```bash

@@ -3,7 +3,8 @@
 <p>
   <a href="packages/plugin/README.md">插件文档(中文)</a> ·
   <a href="packages/plugin/README.en.md">English</a> ·
-  <a href="packages/website/README.md">官网文档</a>
+  <a href="packages/website/README.md">官网文档</a> ·
+  <a href="https://pinterestcollect.pages.dev/">官网 ↗</a>
 </p>
 
 > 一个把 Pinterest 收藏夹和个性化推荐流放进 DeepSeek Harness 的面板插件;附带一个零构建的官网。
@@ -42,11 +43,15 @@ plugin_manager {
 
 ## 官网
 
+线上地址:**https://pinterestcollect.pages.dev/**(英文 `/en/`,Cloudflare Pages 部署)。
+
+本地预览:
+
 ```bash
 python3 -m http.server 8080 --directory packages/website
 ```
 
-打开 http://localhost:8080(英文 `/en/`)。部署与占位符替换见 [packages/website/README.md](packages/website/README.md)。
+打开 http://localhost:8080。部署说明见 [packages/website/README.md](packages/website/README.md)。
 
 ## 开发
 

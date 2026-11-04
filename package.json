@@ -13,5 +13,13 @@
     "test:login": "node packages/plugin/tools/login-cdp-test.mjs && node packages/plugin/tools/login-two-phase-test.mjs",
     "check": "node packages/plugin/tools/verify/check.mjs",
     "serve:website": "python3 -m http.server 8080 --directory packages/website"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/extrastu/pinterest-collect"
+  },
+  "homepage": "https://pinterestcollect.pages.dev/",
+  "bugs": {
+    "url": "https://github.com/extrastu/pinterest-collect/issues"
   }
 }

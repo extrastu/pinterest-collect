@@ -42,29 +42,32 @@ npx serve packages/website
 
 `_headers` 会被 Cloudflare Pages / Netlify 自动识别;GitHub Pages 忽略它,功能不受影响。
 
-## 部署前必须替换的占位符
+## 生产地址
 
-全站有两类占位符,替换后即可上线:
+线上站点:**https://pinterestcollect.pages.dev/**(Cloudflare Pages,英文页 `/en/`)。
 
-| 占位符 | 含义 | 出现在 |
+全站的正式域名与仓库地址已经写死在这两处:
+
+| 值 | 用途 | 出现在 |
 |---|---|---|
-| `https://pinterest-collect.example.com` | 官网正式域名(必须以 `/` 结尾的目录形式一致,例如 `https://pinterest.example.com/`) | canonical、hreflang、OG/Twitter、JSON-LD、robots、sitemap |
-| `https://github.com/your-org/pinterest-collect` | 仓库地址 | 导航、Hero、footer、JSON-LD `sameAs` |
+| `https://pinterestcollect.pages.dev` | 官网域名 | canonical、hreflang、OG/Twitter、JSON-LD、robots、sitemap |
+| `https://github.com/extrastu/pinterest-collect` | 仓库地址 | 导航、Hero、footer、JSON-LD `sameAs` |
 
-一次性替换(在仓库根目录执行):
+### 换成自定义域名(可选)
 
-```bash
-grep -rl 'pinterest-collect.example.com' packages/website | xargs sed -i '' 's#https://pinterest-collect.example.com#https://your-domain.com#g'
-grep -rl 'github.com/your-org/pinterest-collect' packages/website | xargs sed -i '' 's#https://github.com/your-org/pinterest-collect#https://github.com/<you>/pinterest-collect#g'
-```
-
-替换后检查:
+如果之后绑定自定义域名(例如 `pinterest.postsaver.app`),在仓库根目录执行:
 
 ```bash
-grep -rn "example.com\|your-org" website --include='*.html' --include='*.xml' --include='*.txt'
+grep -rl 'pinterestcollect.pages.dev' packages/website | xargs sed -i '' 's#https://pinterestcollect.pages.dev#https://your-domain.com#g'
 ```
 
-> App Store 推广链接里的 `ct=pinterest-collect-site` 是渠道参数,可在 App Store Connect 分析里区分官网来源;需要改推广位时改这个链接即可。
+然后检查:
+
+```bash
+grep -rn "pages.dev" packages/website --include='*.html' --include='*.xml' --include='*.txt' | grep -v README
+```
+
+App Store 推广链接里的 `ct=pinterest-collect-site` 是渠道参数,可在 App Store Connect 分析里区分官网来源;需要改推广位时改这个链接即可。
 
 ## SEO 清单(已内置)
 
