@@ -25,10 +25,12 @@ function PinCloseUp(props) {
     stackDepth,
     boards,
     savedMap,
+    savedRecordMap,
     savingPinId,
     defaultBoardId,
     onSave,
     onUnsave,
+    onUpdateNote,
     onBack,
     onOpenPin,
     onToast
@@ -39,6 +41,9 @@ function PinCloseUp(props) {
   const [error, setError] = useState('')
   const [boardId, setBoardId] = useState(defaultBoardId || PC_DEFAULT_BOARD)
   const [reloadKey, setReloadKey] = useState(0)
+  const [noteDraft, setNoteDraft] = useState('')
+  const [noteEditing, setNoteEditing] = useState(false)
+  const [noteSaving, setNoteSaving] = useState(false)
   const scrollRef = useRef(null)
   const requestRef = useRef(0)
   const [imgFailed, setImgFailed] = useState(false)
@@ -47,10 +52,24 @@ function PinCloseUp(props) {
   const pinTitle = pin ? pin.title || pin.description || '' : ''
   const pinDesc = pin ? pin.description || '' : ''
 
+  // 派生值放在 hook 之前:备注同步 effect 的依赖数组在渲染期就会求值,
+  // 若声明放在下面会踩 TDZ(Cannot access 'savedId' before initialization)。
+  const savedId = pin && savedMap ? savedMap.get(pin.id) : undefined
+  const saved = Boolean(savedId)
+  const savedRecord = saved && savedRecordMap ? savedRecordMap.get(pin.id) : undefined
+  const savedNote = (savedRecord && savedRecord.note) || ''
+
   useEffect(() => {
     setBoardId(defaultBoardId || PC_DEFAULT_BOARD)
     setImgFailed(false)
   }, [pinId, defaultBoardId])
+
+  // 收藏状态/备注变化时同步草稿:换 Pin、刚收藏、或备注在别处更新,都回到阅读态
+  useEffect(() => {
+    setNoteDraft(savedNote)
+    setNoteEditing(false)
+    setNoteSaving(false)
+  }, [pinId, savedId, savedNote])
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0
@@ -87,8 +106,6 @@ function PinCloseUp(props) {
 
   if (!pin) return null
 
-  const savedId = savedMap ? savedMap.get(pin.id) : undefined
-  const saved = Boolean(savedId)
   const saving = savingPinId === pin.id
   const image = imgFailed ? pin.image : pin.imageLarge || pin.image
   const pinner = pin.pinner || {}
@@ -98,7 +115,19 @@ function PinCloseUp(props) {
   function toggleSave() {
     if (saving) return
     if (saved) onUnsave && onUnsave(savedId, pin)
-    else onSave && onSave(pin, boardId)
+    else onSave && onSave(pin, boardId, noteDraft.trim())
+  }
+
+  async function commitNote() {
+    if (!savedId || !onUpdateNote || noteSaving) return
+    const value = noteDraft.trim()
+    setNoteSaving(true)
+    try {
+      const ok = await onUpdateNote(savedId, value)
+      if (ok !== false) setNoteEditing(false)
+    } finally {
+      setNoteSaving(false)
+    }
   }
 
   const relatedBody = (() => {
@@ -246,6 +275,110 @@ function PinCloseUp(props) {
                   (Array.isArray(boards) ? boards : []).map(board => h('option', { key: board.id, value: board.id }, board.title))
                 )
               : null
+          ),
+          h(
+            'div',
+            { className: 'pc-note' },
+            saved
+              ? noteEditing
+                ? h(
+                    'div',
+                    { className: 'pc-note-editor' },
+                    h('textarea', {
+                      className: 'pc-note-input',
+                      rows: 2,
+                      maxLength: 280,
+                      value: noteDraft,
+                      placeholder: pcT('为什么收藏它?(可选)'),
+                      'aria-label': pcT('收藏备注'),
+                      autoFocus: true,
+                      onChange: event => setNoteDraft(event.target.value),
+                      onKeyDown: event => {
+                        if (event.key === 'Escape') {
+                          event.preventDefault()
+                          setNoteDraft(savedNote)
+                          setNoteEditing(false)
+                        } else if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+                          event.preventDefault()
+                          void commitNote()
+                        }
+                      }
+                    }),
+                    h(
+                      'div',
+                      { className: 'pc-note-editor-actions' },
+                      h(
+                        'button',
+                        {
+                          type: 'button',
+                          className: 'pc-btn',
+                          onClick: function () {
+                            setNoteDraft(savedNote)
+                            setNoteEditing(false)
+                          }
+                        },
+                        pcT('取消')
+                      ),
+                      h(
+                        'button',
+                        {
+                          type: 'button',
+                          className: 'pc-save-primary pc-note-save',
+                          disabled: noteSaving || noteDraft.trim() === savedNote,
+                          onClick: function () {
+                            void commitNote()
+                          }
+                        },
+                        noteSaving ? pcT('保存中') : pcT('保存备注')
+                      )
+                    )
+                  )
+                : savedNote
+                  ? h(
+                      'div',
+                      { className: 'pc-note-read' },
+                      h('span', { className: 'pc-note-glyph', 'aria-hidden': true }, pcIcon('pencil', 12)),
+                      h('p', { className: 'pc-note-text' }, savedNote),
+                      h(
+                        'button',
+                        {
+                          type: 'button',
+                          className: 'pc-note-edit',
+                          'aria-label': pcT('编辑备注'),
+                          onClick: function () {
+                            setNoteEditing(true)
+                          }
+                        },
+                        pcT('编辑')
+                      )
+                    )
+                  : h(
+                      'button',
+                      {
+                        type: 'button',
+                        className: 'pc-note-add',
+                        onClick: function () {
+                          setNoteEditing(true)
+                        }
+                      },
+                      pcIcon('plus', 12),
+                      h('span', null, pcT('记一句为什么收藏它'))
+                    )
+              : h('input', {
+                  type: 'text',
+                  className: 'pc-note-input pc-note-input-single',
+                  value: noteDraft,
+                  maxLength: 280,
+                  placeholder: pcT('为什么收藏它?(可选)'),
+                  'aria-label': pcT('收藏备注'),
+                  onChange: event => setNoteDraft(event.target.value),
+                  onKeyDown: event => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault()
+                      toggleSave()
+                    }
+                  }
+                })
           ),
           sourceHref
             ? h('div', { className: 'pc-detail-foot' }, pcIcon('link', 12), h('span', { className: 'pc-ellipsis', style: { minWidth: 0 } }, sourceHref))

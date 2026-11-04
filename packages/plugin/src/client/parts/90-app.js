@@ -140,13 +140,21 @@ function PinterestApp() {
     return map
   }, [collection.pins])
 
+  const savedRecordMap = useMemo(() => {
+    const map = new Map()
+    for (const pin of collection.pins || []) {
+      if (pin && pin.id && !map.has(pin.id)) map.set(pin.id, pin)
+    }
+    return map
+  }, [collection.pins])
+
   const savePin = useCallback(
-    async (pin, boardId) => {
+    async (pin, boardId, note) => {
       if (!pin || !pin.id) return null
       const targetBoard = boardId || (activeBoardId !== 'all' ? activeBoardId : undefined)
       setSavingPinId(pin.id)
       try {
-        const result = await pcFetch('/save', { pin, boardId: targetBoard })
+        const result = await pcFetch('/save', { pin, boardId: targetBoard, note: note || '' })
         if (result && result.collection) setCollection(result.collection)
         const board = (result && result.saved && boards.find(item => item.id === result.saved.boardId)) || null
         showToast(
@@ -177,6 +185,22 @@ function PinterestApp() {
         showToast((error_ && error_.message) || pcT('取消收藏失败'), 'error')
       } finally {
         setSavingPinId('')
+      }
+    },
+    [showToast]
+  )
+
+  const updateNote = useCallback(
+    async (savedId, note) => {
+      if (!savedId) return false
+      try {
+        const result = await pcFetch('/collection/note', { savedId, note: note == null ? '' : note })
+        if (result && result.collection) setCollection(result.collection)
+        showToast(pcT('备注已保存'))
+        return true
+      } catch (error_) {
+        showToast((error_ && error_.message) || pcT('备注保存失败'), 'error')
+        return false
       }
     },
     [showToast]
@@ -338,6 +362,7 @@ function PinterestApp() {
         { className: 'pc-right' },
         h(BrowsePane, {
           savedMap,
+          savedRecordMap,
           savingPinId,
           boards,
           defaultBoardId,
@@ -348,6 +373,7 @@ function PinterestApp() {
           onUnsave: (savedId, pin) => {
             void unsavePin(savedId, pin)
           },
+          onUpdateNote: (savedId, note) => updateNote(savedId, note),
           onOpenSettings: () => setPage('settings'),
           onOpenAccount: () => setPage('account'),
           page,

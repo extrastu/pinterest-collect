@@ -338,7 +338,8 @@ function CollectionPinCard(props) {
     'div',
     { className: 'pc-collection-pin-caption', style: { padding: '6px 2px 0', minWidth: 0 } },
     h('div', { className: 'pc-pin-title pc-collection-pin-title' }, title),
-    meta ? h('div', { className: 'pc-pin-sub pc-ellipsis' }, meta) : null
+    meta ? h('div', { className: 'pc-pin-sub pc-ellipsis' }, meta) : null,
+    pin.note ? h('div', { className: 'pc-collection-pin-note', title: pin.note }, pin.note) : null
   )
 
   return h(
@@ -591,7 +592,8 @@ function CollectionPane(props) {
         if (!term) return true
         const title = String(pin.title || '').toLowerCase()
         const description = String(pin.description || '').toLowerCase()
-        return title.indexOf(term) !== -1 || description.indexOf(term) !== -1
+        const note = String(pin.note || '').toLowerCase()
+        return title.indexOf(term) !== -1 || description.indexOf(term) !== -1 || note.indexOf(term) !== -1
       })
     },
     [pins, query, activeBoardId]

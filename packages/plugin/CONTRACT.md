@@ -47,7 +47,8 @@ v1.1:去掉「推荐分类」chips。右侧未登录时只给登录引导 + 搜�
 - `POST /pinterest-api/collection/boards` `{ title }` → `{ board: Board }`
 - `POST /pinterest-api/collection/boards/rename` `{ id, title }` → `{ board: Board }`
 - `POST /pinterest-api/collection/boards/remove` `{ id }` → `{ ok: true }`(其中的 Pin 归入默认收藏夹)
-- `POST /pinterest-api/save` `{ pin: Pin, boardId? }` → `{ saved: SavedPin, collection: Collection }`
+- `POST /pinterest-api/save` `{ pin: Pin, boardId?, note? }` → `{ saved: SavedPin, collection: Collection }`(重复收藏时带 note 会顺手更新备注)
+- `POST /pinterest-api/collection/note` `{ savedId, note }` → `{ saved: SavedPin, collection: Collection }`(空串清除备注,最多 280 字符)
 - `POST /pinterest-api/unsave` `{ savedId }` → `{ ok: true, collection: Collection }`
 - `GET  /pinterest-api/search?q=<q>&bookmark=<b>&limit=24` → `{ pins: Pin[], bookmark, query }`(登录后结果按画像排序,未登录也能用)
 - `GET  /pinterest-api/related?id=<pinId>&title=&description=&limit=24` → `{ pins: Pin[], bookmark }`
@@ -77,7 +78,7 @@ v1.1:去掉「推荐分类」chips。右侧未登录时只给登录引导 + 搜�
   "isVideo": false
 }
 ```
-`SavedPin` = `Pin` + `{ savedId, boardId, savedAt }`
+`SavedPin` = `Pin` + `{ savedId, boardId, savedAt, note? }`(`note` 是用户写的「为什么收藏它」,可选)
 
 `account` 里 `authReady=false` 表示 Host 侧的登录/推荐模块还没加载(升级过程中),客户端应显示「重启 Harness」提示而不是登录按钮。
 
@@ -137,7 +138,8 @@ props:
 7. loading 用骨架块;error 用浅色提示 + 重试按钮。
 8. 所有可点元素有 `aria-label`,键盘可达;按钮是 `<button type="button">`。
 9. 禁止直接写 DOM、禁止自己写 `<style>` 标签、禁止 localStorage(状态由 App 持有);不新建全局单例。
-10. 组件内 `useMemo` 过滤/排序:按 `savedAt` 倒序;board 过滤;搜索匹配 title/description。
+10. 组件内 `useMemo` 过滤/排序:按 `savedAt` 倒序;board 过滤;搜索匹配 title/description/note。
+11. `SavedPin.note` 存在时在卡片标题下方展示(最多 3 行,超出省略);没有备注时不占位。
 
 ## 验证口径
 

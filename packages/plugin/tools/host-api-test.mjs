@@ -129,8 +129,23 @@ try {
     height: 592,
     pinUrl: 'https://www.pinterest.com/pin/test-pin-1/'
   }
-  const saved = await call('POST', '/pinterest-api/save', { pin, boardId })
+  const saved = await call('POST', '/pinterest-api/save', { pin, boardId, note: '喜欢这个配色' })
   check('保存到指定收藏夹 200', saved.status === 200 && saved.json?.saved?.boardId === boardId, saved.json?.saved?.savedId)
+  check('保存时可带备注', saved.json?.saved?.note === '喜欢这个配色', JSON.stringify(saved.json?.saved?.note))
+
+  const noteUpdated = await call('POST', '/pinterest-api/collection/note', {
+    savedId: saved.json?.saved?.savedId,
+    note: '按钮排法很顺手'
+  })
+  check('更新收藏备注 200', noteUpdated.status === 200 && noteUpdated.json?.saved?.note === '按钮排法很顺手', JSON.stringify(noteUpdated.json?.saved?.note))
+  const noteLong = await call('POST', '/pinterest-api/collection/note', {
+    savedId: saved.json?.saved?.savedId,
+    note: 'x'.repeat(400)
+  })
+  check('备注超长截断到 280', noteLong.json?.saved?.note?.length === 280, `len=${noteLong.json?.saved?.note?.length}`)
+  const noteMissing = await call('POST', '/pinterest-api/collection/note', { savedId: 'not-a-saved-id', note: 'x' })
+  check('不存在的收藏更新备注 404', noteMissing.status === 404, `status=${noteMissing.status}`)
+
   const duplicate = await call('POST', '/pinterest-api/save', { pin, boardId })
   check('重复保存幂等', duplicate.json?.duplicate === true && duplicate.json?.collection?.pins?.length === 1)
 

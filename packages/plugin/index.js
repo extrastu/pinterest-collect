@@ -360,28 +360,55 @@ export function apply(ctx, config = {}) {
     }
   }
 
+  /** 备注:单行化、去首尾空格、最多 280 字符;空串表示没有备注。 */
+  function normalizeNote(value) {
+    return String(value == null ? '' : value).replace(/\s+/g, ' ').trim().slice(0, 280)
+  }
+
   function ensureBoard(id) {
     const col = cache
     if (!id) return col.boards.find(b => b.id === DEFAULT_BOARD_ID)
     return col.boards.find(b => b.id === id) || col.boards.find(b => b.id === DEFAULT_BOARD_ID)
   }
 
-  async function savePin(pin, boardId) {
+  async function savePin(pin, boardId, note) {
     await load()
     const board = ensureBoard(boardId)
     const clean = cleanPin(pin)
+    const noteText = normalizeNote(note)
     const existing = cache.pins.find(p => p.id === clean.id && p.boardId === board.id)
-    if (existing) return { saved: existing, duplicate: true, collection: view() }
+    if (existing) {
+      // 重复收藏时如果这次带了备注,顺手补上/更新,不打断收藏动作
+      if (noteText && existing.note !== noteText) {
+        existing.note = noteText
+        cache.updatedAt = new Date().toISOString()
+        await persist()
+        return { saved: existing, duplicate: true, updatedNote: true, collection: view() }
+      }
+      return { saved: existing, duplicate: true, collection: view() }
+    }
     const saved = {
       ...clean,
       savedId: `${board.id}:${clean.id}`,
       boardId: board.id,
-      savedAt: new Date().toISOString()
+      savedAt: new Date().toISOString(),
+      note: noteText
     }
     cache.pins.unshift(saved)
     cache.updatedAt = saved.savedAt
     await persist()
     return { saved, duplicate: false, collection: view() }
+  }
+
+  /** 给一条已收藏的 Pin 写/改备注(空串等于清除)。 */
+  async function setNote(savedId, note) {
+    await load()
+    const pin = cache.pins.find(p => p.savedId === savedId)
+    if (!pin) throw fail('没有找到这条收藏', 404)
+    pin.note = normalizeNote(note)
+    cache.updatedAt = new Date().toISOString()
+    await persist()
+    return { saved: pin, collection: view() }
   }
 
   async function unsave(savedId) {
@@ -646,8 +673,13 @@ export function apply(ctx, config = {}) {
       }
       if (method === 'POST' && route === '/save') {
         const body = await readBody(req)
-        const result = await savePin(body.pin, body.boardId)
+        const result = await savePin(body.pin, body.boardId, body.note)
         sendJSON(res, 200, result)
+        return
+      }
+      if (method === 'POST' && route === '/collection/note') {
+        const body = await readBody(req)
+        sendJSON(res, 200, await setNote(String(body.savedId || ''), body.note))
         return
       }
       if (method === 'POST' && route === '/unsave') {

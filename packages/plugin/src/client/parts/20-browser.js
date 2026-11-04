@@ -181,7 +181,7 @@ function PcFeedNotice(props) {
  * 收藏状态由 App 传入(savedMap),保存动作也由 App 发。
  */
 function BrowsePane(props) {
-  const { savedMap, savingPinId, onSave, onUnsave, onToast, boards, defaultBoardId, openRequest, onOpenSettings, onOpenAccount, page, onClosePage } = props
+  const { savedMap, savedRecordMap, savingPinId, onSave, onUnsave, onUpdateNote, onToast, boards, defaultBoardId, openRequest, onOpenSettings, onOpenAccount, page, onClosePage } = props
 
   const [account, setAccount] = useState(null)
   const [loginOpen, setLoginOpen] = useState(false)
@@ -776,10 +776,12 @@ function BrowsePane(props) {
             stackDepth: closeupStack.length,
             boards,
             savedMap,
+            savedRecordMap,
             savingPinId,
             defaultBoardId,
             onSave,
             onUnsave,
+            onUpdateNote,
             onBack: popCloseup,
             onOpenPin: pushCloseup,
             onToast
