@@ -47,12 +47,21 @@ Pinterest's related-pins and user-pin-grid data is not a public REST API either;
 
 ### Steps
 
-Install the local directory with the Harness `plugin_manager` tool (use your own absolute path):
+The repository **root is the install entry** (its `package.json` declares `dsh.bundle` / `dsh.client` and exports into this package), so you can install straight from GitHub:
 
 ```text
 plugin_manager {
   action: "install_bundle",
-  target: "/absolute/path/to/pinterest-collect/packages/plugin"
+  target: "github:extrastu/pinterest-collect"
+}
+```
+
+For local development, use the absolute repository path (point at the root, not at `packages/plugin`):
+
+```text
+plugin_manager {
+  action: "install_bundle",
+  target: "/absolute/path/to/pinterest-collect"
 }
 ```
 
@@ -62,7 +71,7 @@ Then:
 2. **Refresh the page** (⌘R / Ctrl+R);
 3. Click the new `Pinterest Collection` sidebar icon.
 
-> This repository is a monorepo: **the plugin package lives in `packages/plugin`**, so point the installer at that directory. The repository root is only a workspace aggregator and contains no plugin entry.
+> This repository is a monorepo: **the install entry is the repository root, and the plugin source lives in `packages/plugin`**. Pointing at `packages/plugin` fails with “declares no bundle” because that source package declares no `dsh.bundle`.
 > The plugin is installed from a local directory. After editing: rebuild the client and refresh for client changes; restart Harness (or toggle the plugin) for Host changes.
 
 ## Usage

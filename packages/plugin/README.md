@@ -47,12 +47,21 @@ Pinterest 对站点响应 `X-Frame-Options: SAMEORIGIN`,浏览器会直接拒绝
 
 ### 安装步骤
 
-在 Harness 会话里用 `plugin_manager` 安装本地目录(路径换成你的仓库绝对路径):
+本仓库的**安装入口在仓库根**(根 `package.json` 声明 `dsh.bundle` / `dsh.client`,导出指向本包),可以直接从 GitHub 安装:
 
 ```text
 plugin_manager {
   action: "install_bundle",
-  target: "/absolute/path/to/pinterest-collect/packages/plugin"
+  target: "github:extrastu/pinterest-collect"
+}
+```
+
+本地开发用仓库绝对路径也可以(指向仓库根,不要指向 `packages/plugin`):
+
+```text
+plugin_manager {
+  action: "install_bundle",
+  target: "/absolute/path/to/pinterest-collect"
 }
 ```
 
@@ -62,7 +71,7 @@ plugin_manager {
 2. **刷新页面**(⌘R / Ctrl+R);
 3. 侧边栏出现「Pinterest 收藏」图标,点开即用。
 
-> 本仓库是 monorepo:**插件包在 `packages/plugin`**,安装时请指向这一层;仓库根目录只是 workspace 聚合,不含插件入口。
+> 本仓库是 monorepo:**安装入口在仓库根,插件源码在 `packages/plugin`**;指向 `packages/plugin` 会因为该包没有声明 `dsh.bundle` 而报「没有声明组合包」。
 > 本插件以本地目录方式安装,改动源码后:客户端改完刷新页面;Host 改完重启 Harness 或关→开插件。
 
 ## 使用

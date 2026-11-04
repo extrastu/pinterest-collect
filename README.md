@@ -11,9 +11,10 @@
 
 ## 仓库结构(monorepo)
 
-| 包 | 说明 | 文档 |
+| 位置 | 说明 | 文档 |
 |---|---|---|
-| [`packages/plugin`](packages/plugin) | **插件本体**:左侧本地收藏夹、右侧 Pinterest 浏览与登录推荐流、账号页、设置页 | [中文](packages/plugin/README.md) · [English](packages/plugin/README.en.md) · [契约](packages/plugin/CONTRACT.md) |
+| 仓库根(包名 `pinterest-collect`) | **安装入口**:`dsh.bundle` / `dsh.client` 声明、bundle patch 与模块导出 | 本 README |
+| [`packages/plugin`](packages/plugin) | **插件源码**:左侧本地收藏夹、右侧 Pinterest 浏览与登录推荐流、账号页、设置页 | [中文](packages/plugin/README.md) · [English](packages/plugin/README.en.md) · [契约](packages/plugin/CONTRACT.md) |
 | [`packages/website`](packages/website) | **官网**:纯静态、中英双语、响应式、内置 SEO(OG / hreflang / JSON-LD / sitemap) | [website/README.md](packages/website/README.md) |
 
 ```
@@ -27,18 +28,27 @@ pinterest-collect/
 
 ## 安装插件
 
-用 Harness 的 `plugin_manager` 指向**插件包目录**(注意是 `packages/plugin`):
+仓库根就是可安装的 bundle 入口(`package.json` 声明 `dsh.bundle` / `dsh.client`,模块导出指向 `packages/plugin`)。可以直接从 GitHub 安装:
 
 ```text
 plugin_manager {
   action: "install_bundle",
-  target: "/absolute/path/to/pinterest-collect/packages/plugin"
+  target: "github:extrastu/pinterest-collect"
+}
+```
+
+本地开发时指向仓库绝对路径也一样(不要指向 `packages/plugin`,那是源码包,没有声明 bundle):
+
+```text
+plugin_manager {
+  action: "install_bundle",
+  target: "/absolute/path/to/pinterest-collect"
 }
 ```
 
 然后重启一次 Harness 并刷新页面,侧边栏会出现「Pinterest 收藏」图标。
 
-> 安装时请指向 `packages/plugin`,**不要**指向仓库根目录:根目录只是 workspace 聚合,不含插件入口。
+> monorepo 布局:安装入口在**仓库根**,插件实现在 `packages/plugin`,官网在 `packages/website`。
 > 详细安装、登录、使用与排错见 [packages/plugin/README.md](packages/plugin/README.md)。
 
 ## 官网

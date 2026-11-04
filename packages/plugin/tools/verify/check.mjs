@@ -45,6 +45,8 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = resolve(HERE, '../..');
+/** monorepo 仓库根:安装入口(root package.json 声明 dsh.bundle,exports 指向 packages/plugin)。 */
+const REPO_ROOT = resolve(PROJECT_ROOT, '../..');
 const HOME = process.env.HOME || homedir();
 const DSH_HOME = process.env.DSH_HOME || join(HOME, '.dsh');
 const PROFILE_DIR = process.env.DSH_PROFILE_DIR || join(DSH_HOME, 'profiles/desktop');
@@ -168,7 +170,13 @@ async function checkA1() {
   } catch (e) {
     throw new Error(`node_modules/pinterest-collect 不可访问：${e.message}`);
   }
-  const targetOk = real === realpathSync(PROJECT_ROOT);
+  let repoReal = '';
+  try {
+    repoReal = realpathSync(REPO_ROOT);
+  } catch {
+    repoReal = '';
+  }
+  const targetOk = real === repoReal || real === realpathSync(PROJECT_ROOT);
   const ok = inBundles && isLink && targetOk;
   return {
     status: ok ? 'PASS' : 'FAIL',
@@ -176,13 +184,13 @@ async function checkA1() {
       `${rel(pkgPath)}\n` +
       `  dsh.profile.bundles 含 pinterest-collect: ${inBundles}（共 ${bundles.length} 个 bundle，位置 #${bundles.indexOf('pinterest-collect')}）\n` +
       `  dependencies.pinterest-collect: ${JSON.stringify(dep)}\n` +
-      `  node_modules/pinterest-collect 是符号链接: ${isLink} → realpath: ${real}（期望 ${realpathSync(PROJECT_ROOT)}）`,
+      `  node_modules/pinterest-collect 是符号链接: ${isLink} → realpath: ${real}（期望仓库根 ${repoReal}，或源码包 ${realpathSync(PROJECT_ROOT)}）`,
     extra: { inBundles, isLink, targetOk, real },
   };
 }
 
 async function checkA2() {
-  const pkgPath = join(PROJECT_ROOT, 'package.json');
+  const pkgPath = join(REPO_ROOT, 'package.json');
   const pkg = readJson(pkgPath);
   const exportsMap = pkg.exports || {};
   const needKeys = ['.', './client', './locale/*.json', './icon'];
@@ -200,17 +208,18 @@ async function checkA2() {
       missingFiles.push(`${k} → (无目标)`);
       continue;
     }
-    if (k === './locale/*.json') {
+    if (k.endsWith('/*.json')) {
+      // 通配 exports(如 ./locale/*.json):检查通配目录下至少有一个 json
+      const wildcardDir = join(REPO_ROOT, dirname(target));
       try {
-        const localeDir = join(PROJECT_ROOT, 'locale');
-        const files = readdirSync(localeDir).filter((f) => f.endsWith('.json'));
-        if (!files.length) missingFiles.push('locale/*.json → locale/ 下没有 json');
+        const files = readdirSync(wildcardDir).filter((f) => f.endsWith('.json'));
+        if (!files.length) missingFiles.push(`${k} → ${dirname(target)} 下没有 json`);
       } catch {
-        missingFiles.push('locale/*.json → locale/ 目录不存在');
+        missingFiles.push(`${k} → ${dirname(target)} 目录不存在`);
       }
       continue;
     }
-    const abs = join(PROJECT_ROOT, target.replace(/^\.\//, ''));
+    const abs = join(REPO_ROOT, target.replace(/^\.\//, ''));
     try {
       if (!statSync(abs).isFile()) missingFiles.push(`${k} → ${target} 不是文件`);
     } catch {
@@ -220,22 +229,26 @@ async function checkA2() {
   const patch = pkg?.dsh?.bundle?.patch;
   const patchExists = patch ? (() => {
     try {
-      return statSync(join(PROJECT_ROOT, patch)).isFile();
+      return statSync(join(REPO_ROOT, patch)).isFile();
     } catch {
       return false;
     }
   })() : false;
+  // client bundle 以「包名」作为浏览器模块 id,必须等于客户端产物里注册的 id
+  const packageName = pkg?.name;
+  const nameOk = packageName === 'pinterest-collect';
   const platform = pkg?.dsh?.client?.platform;
-  const ok = missingKeys.length === 0 && missingFiles.length === 0 && patchExists && platform === 'web';
+  const ok = missingKeys.length === 0 && missingFiles.length === 0 && patchExists && platform === 'web' && nameOk;
   return {
     status: ok ? 'PASS' : 'FAIL',
     evidence:
       `exports keys: ${Object.keys(exportsMap).join(', ')}\n` +
       `  缺失 key: ${missingKeys.length ? missingKeys.join(', ') : '无'}\n` +
       `  目标文件缺失: ${missingFiles.length ? missingFiles.join(' ; ') : '无'}\n` +
-      `  dsh.bundle.patch: ${JSON.stringify(patch)} → 文件存在=${patchExists}\n` +
-      `  dsh.client.platform: ${JSON.stringify(platform)}（期望 "web"）`,
-    extra: { missingKeys, missingFiles, patchExists, platform },
+      `  dsh.bundle.patch: ${JSON.stringify(patch)} → 文件存在=${patchExists}（相对仓库根 ${REPO_ROOT}）\n` +
+      `  dsh.client.platform: ${JSON.stringify(platform)}（期望 "web"）\n` +
+      `  包名: ${JSON.stringify(packageName)}（客户端 bundle id 需要是 pinterest-collect）`,
+    extra: { missingKeys, missingFiles, patchExists, platform, packageName },
   };
 }
 

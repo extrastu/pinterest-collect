@@ -1,9 +1,9 @@
 {
-  "name": "pinterest-collect",
+  "name": "@pinterest-collect/plugin",
   "version": "1.2.0",
   "private": true,
   "type": "module",
-  "description": "Pinterest 收藏:左侧收藏夹,右侧内嵌 Pinterest 浏览与登录推荐,点收藏同步到左侧。DeepSeek Harness 插件。",
+  "description": "Pinterest 收藏插件的源码包(安装入口在仓库根 package.json)",
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",
@@ -14,28 +14,10 @@
     "index.js",
     "client.js",
     "lib/*.mjs",
-    "cordis.patch.yml",
     "locale/*.json",
     "icon.svg",
     "README.md"
   ],
-  "dsh": {
-    "bundle": {
-      "patch": "./cordis.patch.yml"
-    },
-    "meta": {
-      "title": "Pinterest 收藏",
-      "description": "左侧收藏夹 + 右侧 Pinterest 浏览器,浏览时点收藏即同步到自己的收藏列表"
-    },
-    "client": {
-      "platform": "web",
-      "immediately": true,
-      "inject": [
-        "@deepseek-ai/dsh-client-ui-layout",
-        "@deepseek-ai/dsh-client-ui-sidebar"
-      ]
-    }
-  },
   "keywords": [
     "deepseek-harness",
     "dsh-plugin",

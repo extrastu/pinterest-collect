@@ -11,9 +11,10 @@
 
 ## Monorepo layout
 
-| Package | What it is | Docs |
+| Location | What it is | Docs |
 |---|---|---|
-| [`packages/plugin`](packages/plugin) | **The plugin**: local saves on the left, Pinterest browsing + logged-in feed on the right, account page, settings | [English](packages/plugin/README.en.md) · [中文](packages/plugin/README.md) · [contract](packages/plugin/CONTRACT.md) |
+| Repository root (package `pinterest-collect`) | **Install entry**: `dsh.bundle` / `dsh.client` declarations, bundle patch and module exports | this README |
+| [`packages/plugin`](packages/plugin) | **Plugin source**: local saves, Pinterest browsing + logged-in feed, account page, settings | [English](packages/plugin/README.en.md) · [中文](packages/plugin/README.md) · [contract](packages/plugin/CONTRACT.md) |
 | [`packages/website`](packages/website) | **Website**: static, bilingual, responsive, SEO built in (OG / hreflang / JSON-LD / sitemap) | [website/README.md](packages/website/README.md) |
 
 ```
@@ -27,18 +28,27 @@ pinterest-collect/
 
 ## Install the plugin
 
-Point `plugin_manager` at **the plugin package** (note the `packages/plugin` suffix):
+The repository root is the installable bundle entry (`package.json` declares `dsh.bundle` / `dsh.client` and exports into `packages/plugin`), so you can install straight from GitHub:
 
 ```text
 plugin_manager {
   action: "install_bundle",
-  target: "/absolute/path/to/pinterest-collect/packages/plugin"
+  target: "github:extrastu/pinterest-collect"
+}
+```
+
+For local development the absolute repository path works the same way (do not point at `packages/plugin` — that is the source package and declares no bundle):
+
+```text
+plugin_manager {
+  action: "install_bundle",
+  target: "/absolute/path/to/pinterest-collect"
 }
 ```
 
 Restart Harness once and refresh the page; a “Pinterest Collection” icon appears in the sidebar.
 
-> Always install `packages/plugin`, not the repository root — the root is only a workspace aggregator and has no plugin entry.
+> Monorepo layout: the install entry is the **repository root**, the plugin implementation lives in `packages/plugin`, the website in `packages/website`.
 > Full install, sign-in, usage and troubleshooting: [packages/plugin/README.en.md](packages/plugin/README.en.md).
 
 ## Website

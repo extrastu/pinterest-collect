@@ -1,12 +1,9 @@
 {
-  "name": "pinterest-collect-monorepo",
+  "name": "pinterest-collect",
   "version": "1.2.0",
   "private": true,
   "type": "module",
-  "description": "Pinterest 收藏插件 for DeepSeek Harness + 官网(monorepo)",
-  "workspaces": [
-    "packages/*"
-  ],
+  "description": "Pinterest 收藏:左侧收藏夹,右侧内嵌 Pinterest 浏览与登录推荐,点收藏同步到左侧。DeepSeek Harness 插件。",
   "scripts": {
     "build": "node packages/plugin/build-client.mjs",
     "test": "node packages/plugin/tools/host-api-test.mjs && node packages/plugin/tools/host-fetch-test.mjs",
@@ -22,5 +19,48 @@
   "bugs": {
     "url": "https://github.com/extrastu/pinterest-collect/issues"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "pinterest",
+    "bookmark",
+    "pinboard",
+    "webview"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./client": "./packages/plugin/client.js",
+    "./locale/*.json": "./packages/plugin/locale/*.json",
+    "./icon": "./packages/plugin/icon.svg"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "packages/plugin/index.js",
+    "packages/plugin/client.js",
+    "packages/plugin/lib/*.mjs",
+    "packages/plugin/locale/*.json",
+    "packages/plugin/icon.svg",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "meta": {
+      "title": "Pinterest 收藏",
+      "description": "左侧收藏夹 + 右侧 Pinterest 浏览器,浏览时点收藏即同步到自己的收藏列表"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ]
+    }
+  }
 }
