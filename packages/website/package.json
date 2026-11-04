@@ -1,0 +1,9 @@
+{
+  "name": "@pinterest-collect/website",
+  "private": true,
+  "version": "1.2.0",
+  "description": "Static marketing site for the Pinterest Collection plugin (zh/en, responsive, SEO).",
+  "scripts": {
+    "serve": "python3 -m http.server 8080"
+  }
+}

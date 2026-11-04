@@ -1,0 +1,4 @@
+# pinterest-collect · Host 插件行(由 dsh.profile.bundles 自动应用)
+- insert:
+    - id: pinterest-collect
+      name: 'pinterest-collect'

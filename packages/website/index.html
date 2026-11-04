@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <!-- 部署前请把 https://pinterest-collect.example.com 与 https://github.com/your-org/pinterest-collect 替换成你的真实地址 -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pinterest 收藏插件 · DeepSeek Harness · 左侧收藏右侧推荐</title>
+  <meta name="description" content="把 Pinterest 装进 DeepSeek Harness:左侧本地收藏夹,右侧登录后为你生成的个性化推荐流。一键收藏、详情页更多类似、账号页、深浅色与中英双语。开源插件,支持 macOS / Windows / Linux。">
+  <meta name="keywords" content="Pinterest 收藏,Pinterest 插件,DeepSeek Harness,dsh 插件,Pinterest 推荐流,Pinterest 书签,Pinterest 保存">
+  <meta name="author" content="Post Saver">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f0d11" media="(prefers-color-scheme: dark)">
+
+  <link rel="canonical" href="https://pinterest-collect.example.com/">
+  <link rel="alternate" hreflang="zh-CN" href="https://pinterest-collect.example.com/">
+  <link rel="alternate" hreflang="en" href="https://pinterest-collect.example.com/en/">
+  <link rel="alternate" hreflang="x-default" href="https://pinterest-collect.example.com/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Pinterest 收藏">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:title" content="Pinterest 收藏 · DeepSeek Harness 插件">
+  <meta property="og:description" content="左侧你的收藏夹,右侧登录后为你生成的 Pinterest 推荐流。一键收藏、更多类似、账号页、中英双语,开源插件。">
+  <meta property="og:url" content="https://pinterest-collect.example.com/">
+  <meta property="og:image" content="https://pinterest-collect.example.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Pinterest 收藏 DeepSeek Harness 插件:左侧收藏、右侧个性化推荐流">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Pinterest 收藏 · DeepSeek Harness 插件">
+  <meta name="twitter:description" content="左侧你的收藏夹,右侧登录后为你生成的 Pinterest 推荐流。一键收藏、更多类似、账号页、中英双语。">
+  <meta name="twitter:image:alt" content="Pinterest 收藏 DeepSeek Harness 插件:左侧收藏、右侧个性化推荐流">
+  <meta name="twitter:image" content="https://pinterest-collect.example.com/assets/og-image.png">
+
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/styles.css?v=1.2.0">
+  <script defer src="assets/app.js?v=1.2.0"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Pinterest 收藏",
+    "alternateName": "Pinterest Collection for DeepSeek Harness",
+    "applicationCategory": "BrowserApplication",
+    "applicationSubCategory": "DeepSeek Harness plugin",
+    "operatingSystem": "macOS, Windows, Linux",
+    "softwareVersion": "1.2.0",
+    "url": "https://pinterest-collect.example.com/",
+    "description": "把 Pinterest 装进 DeepSeek Harness 的面板插件:左侧本地收藏夹,右侧登录后为你生成的个性化推荐流;支持一键收藏、详情页更多类似、账号页、深浅色与中英双语。",
+    "isAccessibleForFree": true,
+    "inLanguage": ["zh-CN", "en"],
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+    "screenshot": "https://pinterest-collect.example.com/assets/og-image.png",
+    "sameAs": ["https://github.com/your-org/pinterest-collect"]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Pinterest 收藏",
+    "url": "https://pinterest-collect.example.com/",
+    "inLanguage": "zh-CN",
+    "description": "DeepSeek Harness 的 Pinterest 收藏插件官网:功能、安装与常见问题。"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "支持哪些系统?",
+        "acceptedAnswer": { "@type": "Answer", "text": "支持 DeepSeek Harness 的桌面版与 Web 版,系统上覆盖 macOS、Windows 与 Linux。一键登录需要本机安装 Chrome(或 Chromium / Edge / Brave);没有 Chrome 时可以改用「粘贴 Cookie」方式登录。" }
+      },
+      {
+        "@type": "Question",
+        "name": "收藏会同步到我的 Pinterest 账号吗?",
+        "acceptedAnswer": { "@type": "Answer", "text": "不会。收藏保存在本机的 ~/.dsh/pinterest-collect/collection.json,不会写回你的 Pinterest 账号;详情页提供「在 Pinterest 打开」,可以在原帖手动保存。" }
+      },
+      {
+        "@type": "Question",
+        "name": "为什么右侧不是直接嵌入 pinterest.com?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Pinterest 返回 X-Frame-Options: SAMEORIGIN,浏览器会拒绝任何跨源 iframe。插件由 Host 端读取 Pinterest 数据、由 React 渲染浏览界面,所以看起来像内嵌浏览器,但实际上是原生面板。" }
+      },
+      {
+        "@type": "Question",
+        "name": "登录时 Google 提示「此浏览器或应用可能不安全」怎么办?",
+        "acceptedAnswer": { "@type": "Answer", "text": "这是旧版本使用调试端口启动 Chrome 导致的;v1.2 改成两段式登录(登录窗口不带调试端口),更新到最新版本并重启 Harness 后即可正常使用 Google 登录。" }
+      },
+      {
+        "@type": "Question",
+        "name": "不登录可以使用吗?",
+        "acceptedAnswer": { "@type": "Answer", "text": "可以。搜索、浏览与收藏不需要登录;个性化推荐流需要登录 Pinterest 后才会出现。" }
+      },
+      {
+        "@type": "Question",
+        "name": "数据保存在哪里?如何退出登录?",
+        "acceptedAnswer": { "@type": "Answer", "text": "收藏与登录态都保存在 ~/.dsh/pinterest-collect/ 下,登录态文件权限为 600。面板里可以随时「退出登录」,只会删除本机保存的 Cookie。" }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./" aria-label="Pinterest 收藏 首页">
+        <img src="assets/icon.svg" alt="" width="28" height="28">
+        <span>Pinterest 收藏<small>DeepSeek Harness 插件</small></span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="#features">功能</a>
+        <a href="#how">怎么用</a>
+        <a href="#install">安装</a>
+        <a href="#faq">常见问题</a>
+        <a href="https://github.com/your-org/pinterest-collect" rel="noopener">GitHub</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch" aria-label="语言">
+          <span aria-current="true">中文</span>
+          <a href="en/" hreflang="en" lang="en">English</a>
+        </div>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="切换深浅色"></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span>开源插件 · v1.2.0</p>
+          <h1 id="hero-title">把 Pinterest 装进 <em>DeepSeek Harness</em></h1>
+          <p class="hero-lead">左侧是你的收藏夹,右侧是登录后为你生成的 Pinterest 推荐流。看到喜欢的图,点一下 ♥ 就收藏;点开还能顺着「更多类似」一直逛下去。</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#install">安装指南</a>
+            <a class="btn btn-ghost" href="https://github.com/your-org/pinterest-collect" rel="noopener">查看源码</a>
+          </div>
+          <ul class="hero-meta">
+            <li>macOS · Windows · Linux</li>
+            <li>中文 · English</li>
+            <li>深浅色主题</li>
+            <li>开源免费</li>
+          </ul>
+        </div>
+
+        <div class="mock" role="img" aria-label="插件界面示意:左侧收藏列表,右侧 Pinterest 推荐流">
+          <div class="mock-titlebar">
+            <span class="mock-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="mock-url">pinterest-collect</span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-left">
+              <div class="mock-left-head">我的收藏 <span class="mock-count">5</span><span class="mock-plus" aria-hidden="true">+</span></div>
+              <div class="mock-chips"><span class="is-on">全部 5</span><span>我的灵感</span></div>
+              <div class="mock-search">搜索收藏</div>
+              <div class="mock-grid" aria-hidden="true">
+                <div class="mock-card"></div>
+                <div class="mock-card"></div>
+                <div class="mock-card"></div>
+                <div class="mock-card"></div>
+              </div>
+            </div>
+            <div class="mock-right">
+              <div class="mock-address">
+                <span class="field">
+                  <svg class="mock-ico mock-ico-lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4.5 4.5"/></svg>
+                  <span class="mock-ph">搜索 Pinterest 或粘贴链接</span>
+                  <span class="mock-tag">已登录</span>
+                </span>
+                <span class="mock-actions" aria-hidden="true"><svg class="mock-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4.5 4.5"/></svg><svg class="mock-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 4.4V9h-4.6"/></svg><svg class="mock-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.4 8.4"/><path d="M18.4 14.2v5a1 1 0 0 1-1 1H5.6a1 1 0 0 1-1-1V7.4a1 1 0 0 1 1-1h5"/></svg></span>
+              </div>
+              <div class="mock-account"><span class="mock-avatar" aria-hidden="true"></span><span class="mock-name">extra stu</span><span class="mock-on"><span class="mock-dot" aria-hidden="true"></span>推荐按你的口味生成</span></div>
+              <div class="mock-feed" aria-hidden="true">
+                <div class="mock-pin"><span class="mock-save">♥ 收藏</span></div>
+                <div class="mock-pin"><span class="mock-save mock-save-on">✓ 已收藏</span></div>
+                <div class="mock-pin"></div>
+                <div class="mock-pin"></div>
+                <div class="mock-pin"></div>
+                <div class="mock-pin"></div>
+                
+              </div>
+            </div>
+          </div>
+          <span class="mock-note">界面示意</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">功能</p>
+          <h2 id="features-title">一个面板,把浏览、推荐和收藏串起来</h2>
+          <p>不是把网页塞进 iframe,而是按 Harness 原生面板重做的 Pinterest 工作区:推荐流来自你的账号,收藏保存在本机。</p>
+        </div>
+        <div class="features">
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l1.9 5.4 5.4 1.9-5.4 1.9L12 17.8l-1.9-5.4L4.7 10.5l5.4-1.9Z"/><path d="M18.5 15.6l.8 2.3 2.3.8-2.3.8-.8 2.3-.8-2.3-2.3-.8 2.3-.8Z"/></svg></span>
+            <h3>个性化推荐流</h3>
+            <p>登录后读取你自己的 Pinterest 首页推荐,瀑布流无限滚动,看腻了点一下换一批。</p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M9.5 4.5v15"/><path d="M12.5 9h5M12.5 13h5"/></svg></span>
+            <h3>一屏完成收藏</h3>
+            <p>左侧多画板收藏夹,支持搜索、拖拽调宽、右键改名删除;右边点 ♥,左边立刻出现。</p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l8.5 4.7L12 13 3.5 8.2Z"/><path d="M3.5 12.2L12 17l8.5-4.8"/><path d="M3.5 16.2L12 21l8.5-4.8"/></svg></span>
+            <h3>详情页,不是弹窗</h3>
+            <p>大图 + 描述 + 作者,下面接着「更多类似」推荐;返回时保留原来的浏览位置。</p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.8 20.2a7.2 7.2 0 0 1 14.4 0"/></svg></span>
+            <h3>我的账号页</h3>
+            <p>点头像查看你在 Pinterest 上 pin 的图,无限滚动,可以继续收藏或者点开看详情。</p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5h9M17.5 7.5H20M4 16.5h2.5M10 16.5h10"/><circle cx="15" cy="7.5" r="2.2"/><circle cx="7.2" cy="16.5" r="2.2"/></svg></span>
+            <h3>双栏设置</h3>
+            <p>左侧设置项、右侧详情:外观跟随系统 / 浅色 / 深色,语言中文 / English,改完立刻生效。</p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l7.5 2.8v5.4c0 4.3-3 7.3-7.5 9.4-4.5-2.1-7.5-5.1-7.5-9.4V6Z"/><path d="m9 12.1 2.1 2.1 4-4.2"/></svg></span>
+            <h3>隐私优先</h3>
+            <p>登录态只存本机(权限 600),随时一键退出;只读取 Pinterest,不写回你的账号。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="how" aria-labelledby="how-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">怎么用</p>
+          <h2 id="how-title">三步开始</h2>
+          <p>安装后侧边栏会多一个图标,点开就是双栏工作区。</p>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <h3>安装插件</h3>
+            <p>在 Harness 里用 plugin_manager 安装本仓库目录,重启一次 Harness 并刷新页面。</p>
+          </li>
+          <li class="step">
+            <h3>登录 Pinterest</h3>
+            <p>一键打开干净的 Chrome 窗口登录(Google 登录也可以),或手动粘贴 Cookie;登录后推荐流自动出现。</p>
+          </li>
+          <li class="step">
+            <h3>开始收藏</h3>
+            <p>右侧刷推荐、搜索或粘贴链接;点 ♥ 进左侧,点开图片看详情与「更多类似」。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="install" aria-labelledby="install-title">
+      <div class="wrap install-grid">
+        <div class="install-copy">
+          <p class="eyebrow">安装</p>
+          <h2 id="install-title">一条命令装进 Harness</h2>
+          <p>需要 DeepSeek Harness(桌面版或 Web 版)与支持插件安装的 profile。一键登录需要本机有 Chrome;没有 Chrome 时用「粘贴 Cookie」登录。</p>
+          <ul class="install-notes">
+            <li>安装本地目录后,<strong>重启一次 Harness</strong>,再刷新页面;</li>
+            <li>之后改客户端代码只需刷新页面,改 Host 代码需重启或关→开插件;</li>
+            <li>完整说明、脚本与测试见仓库 README。</li>
+          </ul>
+        </div>
+        <div class="code-card">
+          <div class="code-head">
+            <span>plugin_manager</span>
+            <button type="button" class="copy-btn" data-copy="#install-code" data-copy-label="复制" data-copied="已复制">复制</button>
+          </div>
+          <pre id="install-code"><code>plugin_manager {
+  action: "install_bundle",
+  target: "/absolute/path/to/pinterest-collect"
+}
+
+<span class="cmt">// 然后重启一次 Harness,刷新页面</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="privacy" aria-labelledby="privacy-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">数据与隐私</p>
+          <h2 id="privacy-title">你的账号,你的机器</h2>
+          <p>插件不处理你的账号密码,也不把收藏上传到任何第三方。</p>
+        </div>
+        <div class="features">
+          <article class="feature">
+            <h3>收藏保存在本机</h3>
+            <p>写在 <code>~/.dsh/pinterest-collect/collection.json</code>,可随时备份或用编辑器查看。</p>
+          </article>
+          <article class="feature">
+            <h3>登录态权限 600</h3>
+            <p>Cookie 只写在本机 <code>session.json</code>;面板里「退出登录」即删除。</p>
+          </article>
+          <article class="feature">
+            <h3>独立 Chrome 配置</h3>
+            <p>一键登录使用专用 profile,不会读取或改动你日常浏览器的登录状态。</p>
+          </article>
+          <article class="feature">
+            <h3>只读抓取</h3>
+            <p>网络请求只发往 pinterest.com / pinimg.com;不写回账号,不做任何上传。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="promo-title">
+      <div class="wrap">
+        <div class="promo">
+          <img src="assets/postsaver-icon.webp" alt="Post Saver 应用图标" width="64" height="64" loading="lazy">
+          <div class="promo-copy">
+            <strong id="promo-title">相关 App:Post Saver</strong>
+            <p>在 iPhone / iPad 上把 X、Instagram、小红书、Pinterest 等 23 个平台的帖子保存成干净的文字、图片与视频。</p>
+          </div>
+          <a class="btn btn-primary" href="https://apps.apple.com/cn/app/post-saver-save-social-posts/id6816399878?ct=pinterest-collect-site&amp;mt=8" rel="noopener">App Store</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">常见问题</p>
+          <h2 id="faq-title">你可能想知道的</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>支持哪些系统?</summary>
+            <div class="answer"><p>支持 DeepSeek Harness 的桌面版与 Web 版,系统上覆盖 macOS、Windows 与 Linux。一键登录需要本机安装 Chrome(或 Chromium / Edge / Brave);没有 Chrome 时可以改用「粘贴 Cookie」方式登录。</p></div>
+          </details>
+          <details>
+            <summary>收藏会同步到我的 Pinterest 账号吗?</summary>
+            <div class="answer"><p>不会。收藏保存在本机的 <code>~/.dsh/pinterest-collect/collection.json</code>,不会写回你的 Pinterest 账号;详情页提供「在 Pinterest 打开」,可以在原帖手动保存。</p></div>
+          </details>
+          <details>
+            <summary>为什么右侧不是直接嵌入 pinterest.com?</summary>
+            <div class="answer"><p>Pinterest 返回 <code>X-Frame-Options: SAMEORIGIN</code>,浏览器会拒绝任何跨源 iframe。插件由 Host 端读取 Pinterest 数据、由 React 渲染浏览界面,所以看起来像内嵌浏览器,但实际上是原生面板。</p></div>
+          </details>
+          <details>
+            <summary>登录时 Google 提示「此浏览器或应用可能不安全」怎么办?</summary>
+            <div class="answer"><p>这是旧版本使用调试端口启动 Chrome 导致的;v1.2 改成两段式登录(登录窗口不带调试端口),更新到最新版本并重启 Harness 后即可正常使用 Google 登录。</p></div>
+          </details>
+          <details>
+            <summary>不登录可以使用吗?</summary>
+            <div class="answer"><p>可以。搜索、浏览与收藏不需要登录;个性化推荐流需要登录 Pinterest 后才会出现。</p></div>
+          </details>
+          <details>
+            <summary>数据保存在哪里?如何退出登录?</summary>
+            <div class="answer"><p>收藏与登录态都保存在 <code>~/.dsh/pinterest-collect/</code> 下,登录态文件权限为 600。面板里可以随时「退出登录」,只会删除本机保存的 Cookie。</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="./">
+            <img src="assets/icon.svg" alt="" width="28" height="28">
+            <span>Pinterest 收藏<small>DeepSeek Harness 插件</small></span>
+          </a>
+          <p>一个把 Pinterest 推荐流和本地收藏夹放进 DeepSeek Harness 的开源面板插件。</p>
+        </div>
+        <div class="footer-col">
+          <h3>产品</h3>
+          <ul>
+            <li><a href="#features">功能</a></li>
+            <li><a href="#install">安装</a></li>
+            <li><a href="#faq">常见问题</a></li>
+            <li><a href="#privacy">数据与隐私</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>资源</h3>
+          <ul>
+            <li><a href="https://github.com/your-org/pinterest-collect" rel="noopener">GitHub</a></li>
+            <li><a href="https://github.com/your-org/pinterest-collect#readme" rel="noopener">README</a></li>
+            <li><a href="https://apps.apple.com/cn/app/post-saver-save-social-posts/id6816399878?ct=pinterest-collect-site&amp;mt=8" rel="noopener">Post Saver(App Store)</a></li>
+            <li><a href="https://postsaver.pages.dev/" rel="noopener">Post Saver 官网</a></li>
+            <li><a href="en/" hreflang="en" lang="en">English</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Pinterest 收藏 · 开源插件</span>
+        <span>非官方第三方插件,与 Pinterest, Inc. 无关联。</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

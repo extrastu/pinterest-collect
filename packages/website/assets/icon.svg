@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Pinterest collection">
+  <defs>
+    <linearGradient id="pcBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C13A55"/>
+      <stop offset="1" stop-color="#8E1F3A"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#pcBg)"/>
+  <path d="M22 12h20a3.5 3.5 0 0 1 3.5 3.5V52L32 43.5 18.5 52V15.5A3.5 3.5 0 0 1 22 12Z" fill="#FFF4EF" opacity="0.96"/>
+  <path d="M32 35.6c-4.4-3.5-8.4-6.9-8.4-11.2 0-2.9 2.2-5.1 5-5.1 1.7 0 2.9.8 3.4 1.9.5-1.1 1.7-1.9 3.4-1.9 2.8 0 5 2.2 5 5.1 0 4.3-4 7.7-8.4 11.2Z" fill="#B32C48"/>
+</svg>
