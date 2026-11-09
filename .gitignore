@@ -2,3 +2,6 @@ node_modules/
 .DS_Store
 *.log
 packages/plugin/tools/.tmp-*
+
+# 小红书等对外物料,不随仓库发布
+docs/social/
