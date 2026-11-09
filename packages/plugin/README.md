@@ -91,6 +91,7 @@ plugin_manager {
 5. 左侧管理收藏夹:`+` 新建(自带输入框)、`⋯` 改名/删除、搜索框只搜收藏。
 6. 点账号条上的**头像**进入账号页;点齿轮进入**设置页**(外观 / 语言 / 账号)。
 7. **记一句为什么收藏它**:详情页收藏按钮下方可以写一句备注(比如「喜欢这个配色」「这个按钮排法可以借鉴」);备注会显示在左栏收藏卡片上,收藏搜索也能搜到。
+8. **导出数据**:设置 → 关于 → 「导出数据」,把收藏夹、备注和画板导出成 JSON 文件(不含登录 Cookie),方便备份或迁移。
 
 ## 登录是怎么做的(以及为什么不用调试端口)
 
@@ -201,7 +202,7 @@ python3 -m http.server 8080 --directory packages/website
 
 | 命令 | 覆盖 | 现状 |
 |---|---|---|
-| `node tools/host-api-test.mjs` | 用最小 ctx 离屏跑 Host 路由(含真实 Pinterest 搜索、收藏备注读写) | 31 通过 |
+| `node tools/host-api-test.mjs` | 用最小 ctx 离屏跑 Host 路由(含真实 Pinterest 搜索、收藏备注读写) | 34 通过 |
 | `node tools/host-fetch-test.mjs` | 抓取客户端真实联网自测(分页/重试/错误映射) | 210 断言通过 |
 | `node tools/login-cdp-test.mjs` | Chrome CDP 登录管道(headless,不弹窗) | 22 通过 |
 | `node tools/login-two-phase-test.mjs` | 两段式登录:阶段 A 无调试端口 + 阶段 B 读 cookie + 无残留进程 | 16 通过 |

@@ -49,6 +49,7 @@ v1.1:去掉「推荐分类」chips。右侧未登录时只给登录引导 + 搜�
 - `POST /pinterest-api/collection/boards/remove` `{ id }` → `{ ok: true }`(其中的 Pin 归入默认收藏夹)
 - `POST /pinterest-api/save` `{ pin: Pin, boardId?, note? }` → `{ saved: SavedPin, collection: Collection }`(重复收藏时带 note 会顺手更新备注)
 - `POST /pinterest-api/collection/note` `{ savedId, note }` → `{ saved: SavedPin, collection: Collection }`(空串清除备注,最多 280 字符)
+- `GET /pinterest-api/export` → `{ app, version, exportedAt, collection }`(JSON 下载,不含登录 Cookie)
 - `POST /pinterest-api/unsave` `{ savedId }` → `{ ok: true, collection: Collection }`
 - `GET  /pinterest-api/search?q=<q>&bookmark=<b>&limit=24` → `{ pins: Pin[], bookmark, query }`(登录后结果按画像排序,未登录也能用)
 - `GET  /pinterest-api/related?id=<pinId>&title=&description=&limit=24` → `{ pins: Pin[], bookmark }`

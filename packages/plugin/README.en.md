@@ -91,6 +91,7 @@ Then:
 5. Manage boards on the left: `+` creates (inline input), `⋯` renames/deletes, the search box only searches your saves.
 6. Click the **avatar** in the account bar for the account page; click the gear for **settings** (appearance / language / account).
 7. **Note why you saved it**: on the detail page, under the save button, write a one-liner (e.g. "love this palette", "borrow this button layout"). Notes show on the collection cards and are included in collection search.
+8. **Export data**: Settings → About → “Export data” downloads your boards, saves and notes as a JSON file (no login cookie) for backup or migration.
 
 ## How sign-in works (and why no debug port)
 
@@ -198,7 +199,7 @@ Deployment and placeholder replacement (domain, GitHub URL) are documented in [`
 
 | Command | Coverage | Status |
 |---|---|---|
-| `node tools/host-api-test.mjs` | Host routes offscreen (including real Pinterest search and note read/write) | 31 passing |
+| `node tools/host-api-test.mjs` | Host routes offscreen (including real Pinterest search and note read/write) | 34 passing |
 | `node tools/host-fetch-test.mjs` | Fetch client against real network (paging, retries, error mapping) | 210 assertions |
 | `node tools/login-cdp-test.mjs` | CDP login pipeline (headless, no window) | 22 passing |
 | `node tools/login-two-phase-test.mjs` | Two-phase login, no debug port in phase A, no leftover processes | 16 passing |

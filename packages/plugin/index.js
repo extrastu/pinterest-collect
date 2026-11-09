@@ -644,6 +644,26 @@ export function apply(ctx, config = {}) {
         sendJSON(res, 200, view())
         return
       }
+      if (method === 'GET' && route === '/export') {
+        await load()
+        const exportedAt = new Date().toISOString()
+        const payload = {
+          app: 'pinterest-collect',
+          version: VERSION,
+          exportedAt,
+          collection: view()
+        }
+        const body = Buffer.from(JSON.stringify(payload, null, 2), 'utf8')
+        const filename = `pinterest-collect-${exportedAt.slice(0, 10)}.json`
+        res.writeHead(200, {
+          'content-type': 'application/json; charset=utf-8',
+          'content-length': String(body.length),
+          'content-disposition': `attachment; filename="${filename}"`,
+          'cache-control': 'no-store'
+        })
+        res.end(body)
+        return
+      }
       if (method === 'GET' && route === '/search') {
         const query = (url.searchParams.get('q') || '').trim()
         if (!query) throw fail('请输入搜索关键词')

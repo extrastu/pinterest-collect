@@ -32,6 +32,7 @@ function PcSettingsPage(props) {
   const { onBack, onToast, account, onLogout, onOpenAccount, onOpenLogin } = props
   const [section, setSection] = useState('appearance')
   const [busy, setBusy] = useState(false)
+  const [exporting, setExporting] = useState(false)
   const [, forceRefresh] = useState(0)
 
   const theme = pcGetThemeSnapshot()
@@ -74,6 +75,29 @@ function PcSettingsPage(props) {
     }
     pcApplyLocaleSnapshot(pcGetLocaleSnapshot() || { active: id })
     forceRefresh(value => value + 1)
+  }
+
+  async function exportData() {
+    if (exporting) return
+    setExporting(true)
+    try {
+      const response = await fetch('/pinterest-api/export', { headers: { accept: 'application/json' } })
+      if (!response.ok) throw new Error(pcT('导出失败'))
+      const text = await response.text()
+      const blob = new Blob([text], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const date = new Date().toISOString().slice(0, 10)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `pinterest-collect-${date}.json`
+      link.click()
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
+      if (onToast) onToast(pcT('已导出数据'))
+    } catch (error) {
+      if (onToast) onToast((error && error.message) || pcT('导出失败'), 'error')
+    } finally {
+      setExporting(false)
+    }
   }
 
   async function handleLogout() {
@@ -264,6 +288,22 @@ function PcSettingsPage(props) {
         h('li', null, h('span', null, pcT('版本')), h('strong', null, 'Pinterest 收藏 v1.2.0')),
         h('li', null, h('span', null, pcT('数据位置')), h('code', null, '~/.dsh/pinterest-collect/')),
         h('li', null, h('span', null, pcT('说明')), h('span', null, pcT('收藏与登录态只保存在本机。')))
+      ),
+      h(
+        'div',
+        { className: 'pc-settings-export' },
+        h(
+          'button',
+          {
+            type: 'button',
+            className: 'pc-btn pc-settings-export-btn',
+            disabled: exporting,
+            onClick: exportData
+          },
+          pcIcon(exporting ? 'spinner' : 'download', 14),
+          h('span', null, exporting ? pcT('正在导出…') : pcT('导出数据'))
+        ),
+        h('p', { className: 'pc-settings-hint' }, pcT('导出收藏夹、备注与画板为 JSON 文件(不含登录 Cookie)。'))
       ),
       h(
         'div',

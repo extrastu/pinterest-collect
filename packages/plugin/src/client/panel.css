@@ -1472,6 +1472,25 @@ html[data-platform='darwin']:not([data-fullscreen]) .pc-root[data-window-edge='t
   font-size: 11px;
 }
 
+.pc-settings-export {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.pc-settings-export-btn {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.pc-settings-export .pc-settings-hint {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
 .pc-settings-links {
   display: flex;
   flex-direction: column;

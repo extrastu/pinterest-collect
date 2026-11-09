@@ -138,6 +138,15 @@ try {
     note: '按钮排法很顺手'
   })
   check('更新收藏备注 200', noteUpdated.status === 200 && noteUpdated.json?.saved?.note === '按钮排法很顺手', JSON.stringify(noteUpdated.json?.saved?.note))
+  const exported = await call('GET', '/pinterest-api/export')
+  check('GET /export 200 JSON', exported.status === 200 && exported.json?.app === 'pinterest-collect' && typeof exported.json?.version === 'string')
+  check('导出包含收藏与备注', exported.json?.collection?.pins?.[0]?.note === '按钮排法很顺手' && exported.json?.collection?.boards?.length >= 1, `pins=${exported.json?.collection?.pins?.length}`)
+  check(
+    '导出带下载文件名、不含登录态',
+    /attachment; filename="pinterest-collect-\d{4}-\d{2}-\d{2}\.json"/.test(String(exported.headers?.['content-disposition'])) &&
+      !JSON.stringify(exported.json).includes('_pinterest_sess')
+  )
+
   const noteLong = await call('POST', '/pinterest-api/collection/note', {
     savedId: saved.json?.saved?.savedId,
     note: 'x'.repeat(400)
