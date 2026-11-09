@@ -54,6 +54,8 @@ pcAddDict({
   '跟随系统时会随 macOS/Windows 的深浅色自动切换;也可以固定浅色或深色。': 'System follows the macOS/Windows light–dark setting; you can also pin light or dark.',
   '主题属于 Harness 全局偏好,整个界面会一起切换,并会被持久化。': 'Themes are a Harness-wide preference; the whole UI switches together and the choice is persisted.',
   '版本信息与本地数据位置。': 'Version and local data locations.',
+  '插件官网': 'Website',
+  '开发者': 'Developer',
   '登录 Pinterest': 'Sign in to Pinterest',
   '在 iPhone / iPad 上保存社交平台上的帖子(含 Pinterest)。': 'Save posts from social apps on iPhone / iPad, Pinterest included.',
   'iPhone / iPad 上保存社交帖子,覆盖 23 个平台(含 Pinterest)。': 'Save social posts on iPhone / iPad across 23 platforms, Pinterest included.',

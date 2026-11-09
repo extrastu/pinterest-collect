@@ -267,6 +267,36 @@ function PcSettingsPage(props) {
       ),
       h(
         'div',
+        { className: 'pc-settings-links' },
+        h(
+          'a',
+          {
+            className: 'pc-settings-link',
+            href: 'https://pinterestcollect.pages.dev/',
+            target: '_blank',
+            rel: 'noopener noreferrer'
+          },
+          pcIcon('globe', 14),
+          h('span', { className: 'pc-settings-link-label' }, pcT('插件官网')),
+          h('span', { className: 'pc-settings-link-url' }, 'pinterestcollect.pages.dev'),
+          pcIcon('external', 12)
+        ),
+        h(
+          'a',
+          {
+            className: 'pc-settings-link',
+            href: 'https://x.com/iextrastu',
+            target: '_blank',
+            rel: 'noopener noreferrer'
+          },
+          pcIcon('link', 14),
+          h('span', { className: 'pc-settings-link-label' }, pcT('开发者')),
+          h('span', { className: 'pc-settings-link-url' }, 'x.com/iextrastu'),
+          pcIcon('external', 12)
+        )
+      ),
+      h(
+        'div',
         { className: 'pc-settings-promo' },
         h('h4', { className: 'pc-settings-promo-title' }, pcT('相关 App')),
         h('p', { className: 'pc-settings-hint' }, pcT('在 iPhone / iPad 上保存社交平台上的帖子(含 Pinterest)。')),

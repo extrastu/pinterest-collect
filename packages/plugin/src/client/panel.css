@@ -1472,6 +1472,60 @@ html[data-platform='darwin']:not([data-fullscreen]) .pc-root[data-window-edge='t
   font-size: 11px;
 }
 
+.pc-settings-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--pc-border);
+}
+
+.pc-settings-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--pc-border);
+  border-radius: 8px;
+  background: var(--pc-surface);
+  color: var(--pc-fg);
+  font-size: 12.5px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.pc-settings-link:hover {
+  background: var(--pc-surface-2);
+}
+
+.pc-settings-link svg {
+  flex: 0 0 auto;
+  color: var(--pc-muted);
+}
+
+.pc-settings-link-label {
+  flex: 0 0 auto;
+  font-weight: 600;
+}
+
+.pc-settings-link-url {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--pc-muted);
+  font-size: 11.5px;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@container (max-width: 560px) {
+  .pc-settings-link-url {
+    display: none;
+  }
+}
+
 @container (max-width: 780px) {
   .pc-settings-page-scroll {
     padding: 16px 14px 40px;
