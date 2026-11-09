@@ -19,6 +19,71 @@ function pcDedupe(list) {
   return output
 }
 
+/** 全屏图片预览:点击详情页大图打开,Esc / 点背景 / 关闭按钮退出。 */
+function PcImageLightbox(props) {
+  const { src, title, onClose } = props
+  const closeRef = useRef(null)
+  const restoreRef = useRef(null)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
+
+  useEffect(() => {
+    restoreRef.current = typeof document !== 'undefined' ? document.activeElement : null
+    if (closeRef.current && closeRef.current.focus) closeRef.current.focus()
+    function handleKeyDown(event) {
+      if (event.key !== 'Escape') return
+      event.preventDefault()
+      event.stopPropagation()
+      if (onCloseRef.current) onCloseRef.current()
+    }
+    document.addEventListener('keydown', handleKeyDown, true)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown, true)
+      const restore = restoreRef.current
+      if (restore && typeof restore.focus === 'function') restore.focus()
+    }
+  }, [])
+
+  return h(
+    'div',
+    {
+      className: 'pc-lightbox',
+      role: 'dialog',
+      'aria-modal': 'true',
+      'aria-label': title || pcT('图片预览'),
+      onMouseDown: function (event) {
+        if (event.target === event.currentTarget && onCloseRef.current) onCloseRef.current()
+      }
+    },
+    h(
+      'div',
+      { className: 'pc-lightbox-inner' },
+      h('img', {
+        className: 'pc-lightbox-image',
+        src,
+        alt: title || '',
+        referrerPolicy: 'no-referrer',
+        draggable: false
+      })
+    ),
+    title ? h('div', { className: 'pc-lightbox-caption' }, title) : null,
+    h(
+      'button',
+      {
+        ref: closeRef,
+        type: 'button',
+        className: 'pc-lightbox-close',
+        'aria-label': pcT('关闭预览'),
+        title: pcT('关闭预览'),
+        onClick: function () {
+          if (onCloseRef.current) onCloseRef.current()
+        }
+      },
+      pcIcon('close', 18)
+    )
+  )
+}
+
 function PinCloseUp(props) {
   const {
     pin,
@@ -44,6 +109,7 @@ function PinCloseUp(props) {
   const [noteDraft, setNoteDraft] = useState('')
   const [noteEditing, setNoteEditing] = useState(false)
   const [noteSaving, setNoteSaving] = useState(false)
+  const [preview, setPreview] = useState(false)
   const scrollRef = useRef(null)
   const requestRef = useRef(0)
   const [imgFailed, setImgFailed] = useState(false)
@@ -62,6 +128,7 @@ function PinCloseUp(props) {
   useEffect(() => {
     setBoardId(defaultBoardId || PC_DEFAULT_BOARD)
     setImgFailed(false)
+    setPreview(false)
   }, [pinId, defaultBoardId])
 
   // 收藏状态/备注变化时同步草稿:换 Pin、刚收藏、或备注在别处更新,都回到阅读态
@@ -217,7 +284,23 @@ function PinCloseUp(props) {
         { className: 'pc-closeup-card' },
         h(
           'div',
-          { className: 'pc-closeup-media' },
+          {
+            className: 'pc-closeup-media' + (image && !imgFailed ? ' pc-closeup-media-zoomable' : ''),
+            role: image && !imgFailed ? 'button' : undefined,
+            tabIndex: image && !imgFailed ? 0 : undefined,
+            'aria-label': image && !imgFailed ? pcT('查看大图') : undefined,
+            title: image && !imgFailed ? pcT('查看大图') : undefined,
+            onClick: function () {
+              if (image && !imgFailed) setPreview(true)
+            },
+            onKeyDown: function (event) {
+              if (!image || imgFailed) return
+              if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+                event.preventDefault()
+                setPreview(true)
+              }
+            }
+          },
           image && !imgFailed
             ? h('img', {
                 src: image,
@@ -226,7 +309,10 @@ function PinCloseUp(props) {
                 draggable: false,
                 onError: () => setImgFailed(true)
               })
-            : h('div', { className: 'pc-pin-fallback' }, pcIcon('pin', 30))
+            : h('div', { className: 'pc-pin-fallback' }, pcIcon('pin', 30)),
+          image && !imgFailed
+            ? h('span', { className: 'pc-closeup-zoom', 'aria-hidden': true }, pcIcon('search', 13), h('span', null, pcT('查看大图')))
+            : null
         ),
         h(
           'div',
@@ -385,6 +471,13 @@ function PinCloseUp(props) {
             : null
         )
       ),
+      preview && image && !imgFailed
+        ? h(PcImageLightbox, {
+            src: image,
+            title: pin.title || pin.description || '',
+            onClose: () => setPreview(false)
+          })
+        : null,
       h(
         'div',
         { className: 'pc-closeup-related' },

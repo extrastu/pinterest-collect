@@ -5,6 +5,9 @@
  */
 pcAddDict({
   '查看 Pin:{title}': 'View Pin: {title}',
+  '查看大图': 'View larger',
+  '关闭预览': 'Close preview',
+  '图片预览': 'Image preview',
   '取消收藏': 'Unsave',
   '收藏到我的收藏': 'Save to my saves',
   '保存中': 'Saving',
